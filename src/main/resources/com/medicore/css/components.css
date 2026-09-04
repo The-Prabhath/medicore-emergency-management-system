@@ -1,0 +1,165 @@
+/* ---------- Sidebar ---------- */
+.sidebar {
+    -fx-background-color: -fx-surface-2;
+    -fx-border-color: transparent -fx-border-hairline transparent transparent;
+    -fx-border-width: 0 1 0 0;
+}
+
+.brand-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-primary;
+    -fx-padding: 0 0 0 8;
+}
+
+.brand-subtitle {
+    -fx-font-size: 11px;
+    -fx-text-fill: -fx-text-secondary;
+    -fx-padding: 0 0 0 8;
+}
+
+.nav-item {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-secondary;
+    -fx-alignment: CENTER_LEFT;
+    -fx-pref-width: 186;
+    -fx-padding: 8 10 8 10;
+    -fx-background-radius: 8;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+}
+
+.nav-item:hover {
+    -fx-background-color: derive(-fx-accent-muted, 0%);
+    -fx-text-fill: -fx-accent;
+}
+
+/* ---------- Content shell ---------- */
+.content-region {
+    -fx-background-color: -fx-surface-0;
+}
+
+.screen {
+    -fx-background-color: -fx-surface-0;
+}
+
+.screen-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.screen-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-text-secondary;
+}
+
+/* ---------- Cards ---------- */
+.stat-card {
+    -fx-background-color: -fx-surface-1;
+    -fx-background-radius: 12;
+    -fx-padding: 14 16 14 16;
+    -fx-spacing: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 6, 0, 0, 1);
+}
+
+.stat-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-text-secondary;
+}
+
+.stat-value {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.stat-warning { -fx-text-fill: -fx-warning; }
+.stat-success { -fx-text-fill: -fx-success; }
+
+.panel-card {
+    -fx-background-color: -fx-surface-1;
+    -fx-background-radius: 12;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 6, 0, 0, 1);
+}
+
+.panel-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-primary;
+}
+
+/* ---------- Lists ---------- */
+.preview-list {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.preview-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 8 10 8 10;
+    -fx-text-fill: -fx-text-primary;
+    -fx-font-size: 13px;
+}
+
+.preview-list .list-cell:filled:hover {
+    -fx-background-color: -fx-surface-2;
+    -fx-background-radius: 8;
+}
+
+/* ---------- Buttons ---------- */
+.button {
+    -fx-background-color: -fx-surface-1;
+    -fx-border-color: -fx-border-hairline;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-text-fill: -fx-text-primary;
+    -fx-padding: 7 14 7 14;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: -fx-surface-2;
+}
+
+.btn-primary {
+    -fx-background-color: -fx-accent;
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+    -fx-font-weight: bold;
+}
+
+.btn-primary:hover {
+    -fx-background-color: derive(-fx-accent, -10%);
+}
+
+.btn-danger {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-danger;
+    -fx-border-color: -fx-danger;
+}
+
+.btn-danger:hover {
+    -fx-background-color: derive(-fx-danger, 90%);
+}
+
+/* ---------- Form fields ---------- */
+.text-field {
+    -fx-background-color: -fx-surface-1;
+    -fx-border-color: -fx-border-hairline;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 7 10 7 10;
+    -fx-font-size: 12px;
+}
+
+.text-field:focused {
+    -fx-border-color: -fx-accent;
+}
+
+.form-message {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-text-secondary;
+}

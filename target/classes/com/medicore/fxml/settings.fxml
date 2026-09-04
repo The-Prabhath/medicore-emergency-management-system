@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      styleClass="screen" spacing="16">
+    <padding><Insets top="24" right="28" bottom="24" left="28"/></padding>
+
+    <Label text="Settings" styleClass="screen-title"/>
+    <Label text="MediCore — Mini Hospital Emergency Management System" styleClass="screen-subtitle"/>
+
+    <VBox styleClass="panel-card" spacing="8">
+        <Label text="About" styleClass="panel-title"/>
+        <Label text="Patient records: Binary Search Tree, keyed by Patient ID." wrapText="true"/>
+        <Label text="Emergency queue: custom singly-linked FIFO queue." wrapText="true"/>
+        <Label text="Treatment history: custom array-backed LIFO stack." wrapText="true"/>
+        <Label text="Visit history: singly linked list, one chain per patient." wrapText="true"/>
+    </VBox>
+</VBox>

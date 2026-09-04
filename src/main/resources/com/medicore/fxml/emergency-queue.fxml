@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.medicore.controller.EmergencyQueueController"
+      styleClass="screen" spacing="16">
+    <padding><Insets top="24" right="28" bottom="24" left="28"/></padding>
+
+    <Label text="Emergency Queue" styleClass="screen-title"/>
+    <Label text="FIFO — patients are called in the order they arrived" styleClass="screen-subtitle"/>
+
+    <HBox spacing="8">
+        <TextField fx:id="enqueueIdField" promptText="Existing Patient ID to add" prefWidth="220"/>
+        <Button text="Enqueue" onAction="#handleEnqueue" styleClass="btn-primary"/>
+        <Button text="Call next patient (Dequeue)" onAction="#handleDequeue" styleClass="btn-primary"/>
+    </HBox>
+
+    <Label fx:id="statusLabel" styleClass="form-message"/>
+
+    <ListView fx:id="queueListView" VBox.vgrow="ALWAYS" styleClass="preview-list"/>
+</VBox>

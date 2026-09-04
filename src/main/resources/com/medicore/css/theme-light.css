@@ -1,0 +1,18 @@
+.root {
+    -fx-surface-0: #F5F5F7;
+    -fx-surface-1: #FFFFFF;
+    -fx-surface-2: #FBFBFD;
+    -fx-text-primary: #1D1D1F;
+    -fx-text-secondary: #6E6E73;
+    -fx-text-muted: #A1A1A6;
+    -fx-border-hairline: #E5E5EA;
+    -fx-accent: #0A84FF;
+    -fx-accent-muted: #E8F1FF;
+    -fx-danger: #E24B4A;
+    -fx-warning: #EF9F27;
+    -fx-success: #34A853;
+
+    -fx-background-color: -fx-surface-0;
+    -fx-font-family: "Segoe UI", "Inter", sans-serif;
+    -fx-font-size: 13px;
+}
