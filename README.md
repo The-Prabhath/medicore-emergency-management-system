@@ -1,68 +1,193 @@
 # MediCore — Mini Hospital Emergency Management System
 
-A JavaFX desktop application demonstrating four core data structures in a
-realistic hospital emergency-management scenario.
+A JavaFX desktop application that simulates emergency-department patient
+flow — registration, triage queueing, treatment logging, and per-patient
+visit history — built around four classic data structures, each
+implemented from scratch.
 
-> **Reference/inspiration build.** This project was generated as a study
-> reference based on a CIT300-style brief. If you're using it for a real
-> assignment: read every class, understand it, then re-implement it in your
-> own words. Submitting this as-is would not satisfy an individual-work
-> requirement and the marker will likely recognize it.
+![Java](https://img.shields.io/badge/Java-21%2B-orange)
+![JavaFX](https://img.shields.io/badge/JavaFX-21-blue)
+![Build](https://img.shields.io/badge/build-Maven-red)
+![Tests](https://img.shields.io/badge/tests-JUnit%205-green)
 
-## Data structures
+> **This is a reference build, not a submission.** It was generated as a
+> study reference based on a CIT300-style assignment brief. If you're
+> using it for real coursework with an individual-work requirement: read
+> every class until you can explain it without looking, then write your
+> own version in your own words. A marker checking commit history and
+> asking you to walk through the code will notice a copy-paste.
 
-| Structure | File | Backs |
-|---|---|---|
-| Binary Search Tree | `datastructures/PatientBST.java` | Patient Records screen |
-| Queue (custom linked FIFO) | `datastructures/EmergencyQueue.java` | Emergency Queue screen |
-| Stack (custom array-backed LIFO) | `datastructures/TreatmentStack.java` | Treatment History screen |
-| Singly Linked List | `datastructures/VisitLinkedList.java` | Visit History screen (per patient) |
+---
 
-Each structure is implemented from scratch (no `java.util.Stack`,
-`java.util.Queue`, or `TreeMap`) so the mechanics are explicit and easy to
-explain in a demo video.
+## Contents
 
-## Running it
+- [Overview](#overview)
+- [Why these data structures](#why-these-data-structures)
+- [Architecture](#architecture)
+- [Project structure](#project-structure)
+- [Screens](#screens)
+- [Getting started](#getting-started)
+- [Running the tests](#running-the-tests)
+- [Design system](#design-system)
+- [Known limitations](#known-limitations)
+- [Roadmap ideas](#roadmap-ideas)
 
-```bash
-mvn clean javafx:run
+---
+
+## Overview
+
+MediCore manages the lifecycle of an emergency-department patient:
+
+```
+Registered  →  Waiting in queue  →  Called for treatment  →  Treatment completed  →  Visit logged
+   (BST)            (Queue)              (dequeue)               (Stack)          (Linked List)
 ```
 
-Requires JDK 21+ and Maven. JavaFX dependencies are pulled automatically
-via the `javafx-maven-plugin`.
+Every one of those transitions is backed by a specific data structure,
+chosen because its behavior matches the real-world constraint:
 
-## Running tests
+| Stage | Structure | Why |
+|---|---|---|
+| Patient records | **Binary Search Tree** | Ordered by Patient ID; O(log n) average search/insert/delete; in-order traversal gives sorted output for free |
+| Waiting room | **Queue (FIFO)** | Fairness — first patient in is the first called, no exceptions |
+| Completed treatments | **Stack (LIFO)** | "Undo the last thing that happened" is a natural pop; most recent treatment is always on top |
+| Per-patient history | **Singly Linked List** | Chronological, append-heavy, no need for random access or shrinking arrays |
+
+## Why these data structures
+
+None of the four use `java.util.Stack`, `java.util.Queue`/`LinkedList`, or
+`TreeMap`/`TreeSet`. They're hand-built (`PatientBST`, `EmergencyQueue`,
+`TreatmentStack`, `VisitLinkedList`) so the underlying mechanics — node
+pointers, rotations on delete, chaining — are visible and explainable,
+rather than hidden behind a standard-library call.
+
+## Architecture
+
+Classic MVC, with a thin service façade so the UI layer never touches the
+data structures directly:
+
+```
+┌─────────────┐      ┌───────────────┐      ┌──────────────┐
+│    View     │◄────►│   Controller   │◄────►│   Service    │
+│ (FXML + CSS)│      │  (JavaFX ctrl) │      │  (façade)    │
+└─────────────┘      └───────────────┘      └──────┬───────┘
+                                                     │
+                                            ┌────────▼────────┐
+                                            │  Data structures │
+                                            │  BST / Queue /   │
+                                            │  Stack / LinkedList │
+                                            └──────────────────┘
+```
+
+- **Model** (`model/`) — plain Java objects: `Patient`, `Visit`,
+  `TreatmentRecord`, `Priority`. Zero JavaFX imports, fully unit-testable
+  on their own.
+- **Data structures** (`datastructures/`) — the four required structures.
+  Framework-free, same reasoning as above.
+- **Service** (`service/HospitalService.java`) — the only class that owns
+  and mutates the data structures. Controllers call methods like
+  `registerPatient()`, `callNextPatient()`, `completeTreatment()` — never
+  `PatientBST.insert()` directly.
+- **Controller** (`controller/`) — one controller per screen, wired to
+  FXML via `@FXML` and `fx:id`.
+- **View** (`resources/fxml/`, `resources/css/`) — layout and styling,
+  no business logic.
+
+## Project structure
+
+```
+medicore/
+├── pom.xml
+├── README.md
+├── src/
+│   ├── main/
+│   │   ├── java/com/medicore/
+│   │   │   ├── MainApp.java
+│   │   │   ├── model/              Patient, Visit, TreatmentRecord, Priority
+│   │   │   ├── datastructures/     PatientBST, EmergencyQueue, TreatmentStack, VisitLinkedList
+│   │   │   ├── service/            HospitalService (façade)
+│   │   │   ├── controller/         One controller per screen
+│   │   │   └── util/               SceneNavigator
+│   │   └── resources/com/medicore/
+│   │       ├── fxml/               dashboard, patient-records, emergency-queue,
+│   │       │                       treatment-history, visit-history, settings, main-layout
+│   │       └── css/                theme-light.css, components.css
+│   └── test/java/com/medicore/datastructures/
+│       ├── PatientBSTTest.java
+│       ├── EmergencyQueueTest.java
+│       ├── TreatmentStackTest.java
+│       └── VisitLinkedListTest.java
+```
+
+## Screens
+
+| Screen | What it does |
+|---|---|
+| **Dashboard** | Live stats (total patients, waiting, treated today), queue preview, recent treatments |
+| **Patients** | Register (BST insert), search by ID, delete, sorted list (in-order traversal) |
+| **Emergency Queue** | Enqueue an existing patient, "Call next patient" (dequeue), live waiting list |
+| **Treatments** | Log a completed treatment (push), "Undo last" (pop), most-recent-first history |
+| **Visit History** | Per-patient timeline: add / search / remove a visit, load by Patient ID |
+| **Settings** | About screen explaining the data-structure choices |
+
+## Getting started
+
+**Requirements:** JDK 21+, Maven 3.9+ (or use VS Code's bundled Maven
+support via the *Extension Pack for Java*).
+
+```bash
+git clone <your-repo-url>
+cd medicore
+
+# First build — downloads JavaFX + JUnit from Maven Central
+mvn clean install
+
+# Run the app
+mvn javafx:run
+```
+
+If you're on Apple Silicon or hit a JavaFX native-module error, make sure
+your Maven settings aren't pinned to an old JavaFX classifier — the
+`javafx-maven-plugin` should resolve the correct platform artifacts
+automatically from Maven Central.
+
+## Running the tests
 
 ```bash
 mvn test
 ```
 
-Unit tests cover insert/search/delete/traversal (BST), FIFO ordering and
-empty-queue handling (Queue), LIFO ordering and empty-stack handling
-(Stack), and add/search/remove across head/middle/tail (Linked List).
+Coverage focuses on the graded core:
 
-## Architecture
+- **BST** — duplicate-ID rejection, search hit/miss, in-order ordering, delete (leaf and two-children/successor cases)
+- **Queue** — empty-queue exception, strict FIFO ordering, non-destructive `displayAll()`
+- **Stack** — empty-stack exception, strict LIFO ordering, most-recent-first display
+- **Linked list** — chronological append, search hit/miss, remove at head/middle/tail
 
-```
-model/            Plain data classes (Patient, Visit, TreatmentRecord, Priority)
-datastructures/   The four required structures, framework-free
-service/          HospitalService — façade the controllers talk to
-controller/       One JavaFX controller per screen
-util/             SceneNavigator (screen switching), etc.
-resources/fxml/   One .fxml per screen
-resources/css/    Theme + shared component styles
-```
+## Design system
 
-Controllers never touch `PatientBST` / `EmergencyQueue` / `TreatmentStack`
-/ `VisitLinkedList` directly — everything goes through `HospitalService`,
-which keeps the data structures independently testable and the UI layer
-swappable.
+Apple-inspired: one accent color (`#0A84FF`), neutral gray/white surfaces,
+12px card radii, soft shadows instead of hard borders, Segoe UI/Inter
+typography. Tokens live in `theme-light.css`; shared component styles
+(cards, buttons, nav items, list rows) live in `components.css`.
 
-## Screens
+## Known limitations
 
-- **Dashboard** — live stats, queue preview, recent treatments
-- **Patients** — BST insert / search / delete / in-order list
-- **Emergency Queue** — enqueue / dequeue (call next patient)
-- **Treatments** — push (complete treatment) / pop (undo last)
-- **Visit History** — per-patient linked list: add / search / remove / display
-- **Settings** — about screen summarizing the data-structure choices
+- `PatientBST` is not self-balancing — worst case (patients registered in
+  strictly sorted ID order) degrades to O(n).
+- No persistence yet — state resets on restart (see roadmap).
+- Single-window desktop app only; no authentication/multi-user support.
+
+## Roadmap ideas
+
+- Swap in an AVL or red-black variant of `PatientBST` for guaranteed
+  O(log n).
+- Add a `RepositoryInterface` + SQLite/JSON backing so data survives
+  restarts, without touching the core data-structure classes.
+- Priority-aware queue variant (still FIFO within a priority tier).
+- Exportable end-of-shift PDF report.
+
+---
+
+*Generated as a concept/reference build from a CIT300-style assignment
+brief. Study it, understand it, then build your own.*
