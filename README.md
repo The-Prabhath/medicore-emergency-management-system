@@ -11,9 +11,6 @@ implemented from scratch.
 ![Tests](https://img.shields.io/badge/tests-JUnit%205-green)
 
 
-
----
-
 ## Contents
 
 - [Overview](#overview)
