@@ -10,12 +10,7 @@ implemented from scratch.
 ![Build](https://img.shields.io/badge/build-Maven-red)
 ![Tests](https://img.shields.io/badge/tests-JUnit%205-green)
 
-> **This is a reference build, not a submission.** It was generated as a
-> study reference based on a CIT300-style assignment brief. If you're
-> using it for real coursework with an individual-work requirement: read
-> every class until you can explain it without looking, then write your
-> own version in your own words. A marker checking commit history and
-> asking you to walk through the code will notice a copy-paste.
+
 
 ---
 
