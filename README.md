@@ -1,8 +1,8 @@
 # MediCore — Mini Hospital Emergency Management System
 
 A JavaFX desktop application that simulates emergency-department patient
-flow — registration, triage queueing, treatment logging, and per-patient
-visit history — built around four classic data structures, each
+flow registration, triage queueing, treatment logging, and per-patient
+visit history built around four classic data structures, each
 implemented from scratch.
 
 ![Java](https://img.shields.io/badge/Java-21%2B-orange)
