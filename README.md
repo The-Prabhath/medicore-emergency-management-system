@@ -181,5 +181,5 @@ typography. Tokens live in `theme-light.css`; shared component styles
 
 ---
 
-*Generated as a concept/reference build from a CIT300-style assignment
-brief. Study it, understand it, then build your own.*
+*Kavindu Prabhath Samarathunga
+*
